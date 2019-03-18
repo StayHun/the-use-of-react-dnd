@@ -9,7 +9,7 @@ const cards = [{ id: 'Chapter', activities: [] }, { id: 'Content' }, { id: 'Exer
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { place: [], temp: '', status: false, begin: false, order: 0 };
+    this.state = { place: [], temp: '', status: false, begin: false, order: 0, insideOrder: 0 };
     this.move = this.move.bind(this);
     this.showStatus = this.showStatus.bind(this);
     // this.change = this.change.bind(this);
@@ -30,29 +30,28 @@ class App extends Component {
     console.log(this.state);
     const cards = [{ id: 'Chapter', activities: [] }, { id: 'Content' }, { id: 'Exercise' }, { id: 'Link' }, { id: 'SCORM' }];
     if (this.state.status) {
-      console.log(card);
+      console.log(this.state);
       let place = this.state.place;
       switch (card) {
         case 'Chapter':
           console.log(cards);
           place.push(cards[0]);
           break;
-        case 'Content':
-          console.log(cards[0]);
-          place[this.state.order].activities.push(cards[1]);
-          break;
-        case 'Exercise':
-          console.log(cards[0]);
-          place[this.state.order].activities.push(cards[2]);
-          break;
-        case 'Link':
-          place[this.state.order].activities.push(cards[3]);
-          break;
-        case 'SCORM':
-          place[this.state.order].activities.push(cards[4]);
-          break;
         default:
-          console.log(cards);
+          if (this.state.place[0]) {
+            console.log(this.state);
+            const length = this.state.place[this.state.order].activities.length;
+            console.log(length);
+            place[this.state.order].activities[length] = { id: card };
+            console.log(this.state.place[this.state.order].activities);
+            const index = { old: place[this.state.order].activities.length - 1, news: this.state.insideOrder, indexs: this.state.order };
+            console.log(index);
+            if (index.old === 0 || index.news === index.old) {
+              console.log("aaa");
+            } else {
+              this.changeOrder(index);
+            }
+          }
       }
       console.log(cards);
       console.log(this.state);
@@ -60,23 +59,35 @@ class App extends Component {
     }
   }
 
-/**
- * 1.表明接收器可以接收数据 2.确定接收数据的具体插入位置
- */
+  /**
+   * 1.表明接收器可以接收数据 2.确定接收数据的具体插入位置
+   */
   showStatus(lesson) {
-    console.log("status");
-    console.log(lesson);
     var num = 0;
     this.setState({ status: true });
     this.state.place.every((item, index) => {
+      var insideOrder = parseInt(lesson.y / 33 - index - 1);
+      if(index){
+        insideOrder = parseInt(lesson.y / 33 - this.state.place[index-1].activities.length - index - 1);
+        if(insideOrder<0){
+          insideOrder = 0;
+        }
+      }
+      console.log(insideOrder);
+      if (insideOrder > this.state.place[index].activities.length - 1) {
+        console.log("gggggggggggg");
+        insideOrder = this.state.place[index].activities.length;
+        console.log(insideOrder);
+      }
       num = num + (this.state.place[index].activities.length + 1) * 33;
       if (lesson.y < num) {
         console.log("rrrrrrrrrrrrrrrrrrrrrrrrr");
-        this.setState({ order: index }, function () {
+        this.setState({ order: index, insideOrder: insideOrder }, function () {
           console.log(this.state);
         });
         return false;
       } else {
+        this.setState({ insideOrder: insideOrder });
         console.log("sssssssssssssssssssssssssss");
         return true;
       }
@@ -89,16 +100,16 @@ class App extends Component {
     console.log(index);
     const datas = this.state.place;
     let data = datas[index.indexs];
-    if(index.old>index.news){
+    if (index.old > index.news) {
       const temp = data.activities[index.old];
-      for(let i=index.old; i>index.news; i--){
-        data.activities[i]=data.activities[i-1];
+      for (let i = index.old; i > index.news; i--) {
+        data.activities[i] = data.activities[i - 1];
       }
       data.activities[index.news] = temp;
     } else {
       const temp = data.activities[index.old];
-      for(let i=index.old; i<index.news; i++){
-        data.activities[i]=data.activities[i+1];
+      for (let i = index.old; i < index.news; i++) {
+        data.activities[i] = data.activities[i + 1];
       }
       data.activities[index.news] = temp;
     }

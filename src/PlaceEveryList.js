@@ -16,7 +16,7 @@ class PlaceEveryList extends Component {
         //         </div>
         //     )
         // };
-        // console.log(this.props);
+        console.log(this.props);
         return connectDropTarget(
             connectDragSource(
                 <div style={{ width: '200px', margin: '10px 10px 10px 40px', border: '1px solid black' , opacity}}>
