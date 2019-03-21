@@ -23,10 +23,10 @@ const chessSquareTarget = {
         //   return false;
     },
     drop(props, monitor, component) {
-        console.log("drop");
-        console.log(props);
-        console.log(monitor.getDifferenceFromInitialOffset());
-        console.log(monitor.getClientOffset());
+        // console.log("drop");
+        console.log(props); //该对象里面的最后一个调用 a3
+        // console.log(monitor.getDifferenceFromInitialOffset());
+        // console.log(monitor.getClientOffset());
         props.showStatus(monitor.getClientOffset());
         if (monitor.didDrop()) {
             return;
@@ -66,17 +66,16 @@ class Place extends Component {
         this.getChange = this.getChange.bind(this);
     }
     getChange(index) {
-        console.log("000000000000000000000000");
         console.log(index);
         this.props.changeOrder(index);
     }
     render() {
-        // console.log(this.props);
-        const { connectDropTarget, content } = this.props;
+        console.log(this.props.content); // 首次刷新会运行一次
+        const { connectDropTarget } = this.props;
         // console.log(this.state.change);
         return connectDropTarget(
-            <div style={{ height: '350px', maxHeight: '350px', width: '400px', overflow: 'auto' }}>
-                {content.map((item, index) => (<PlaceList id={item} getChange={this.getChange} key={index} index={index} />))}
+            <div style={{ height: '350px', maxHeight: '350px', width: '400px', overflow: 'auto' ,border: '1px solid black'}}>
+                {this.props.content.map((item, index) => (<PlaceList id={item} getChange={this.getChange} key={index} index={index} />))}
                 {/* <PlaceList /> */}
             </div>
         );

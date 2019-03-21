@@ -10,6 +10,7 @@ class PlaceList extends Component {
         // this.getNew = this.getNew.bind(this);
         this.getPush = this.getPush.bind(this);
         this.getChangeOrder = this.getChangeOrder.bind(this);
+        console.log("mmmmmmmmmmmm"); // a7
     }
     // getOld(old) {
     //     console.log(this.state.id.activities);
@@ -73,14 +74,15 @@ class PlaceList extends Component {
         //         </div>
         //     )
         // };
-        console.log(this.props);
+        console.log(this.props); //a8
+        console.log(this.state);
         return (
             <div>
                 <div style={{ width: '200px', margin: '10px', border: '1px solid black' }}>
-                    {this.state.id.id}
+                    {this.props.id.title}
                     {/* {isDragging && ' (and I am being dragged now)'} */}
                 </div>
-                {this.state.id.activities.map((item, index) => (<PlaceEveryList getPush={this.getPush} getChangeOrder={this.getChangeOrder} key={index} fatherIndex={this.props.index} index={index} content={item.id} />))}
+                {this.props.id.activities.map((item, index) => (<PlaceEveryList getPush={this.getPush} getChangeOrder={this.getChangeOrder} key={index} fatherIndex={this.props.index} index={index} content={item.title} />))}
                 {/* <PlaceEveryList content={this.props.id.activities} /> */}
                 {/* {id.activities.map((item, index) => (<div key={index} style={{ width:'200px', margin: '10px 10px 10px 40px', border: '1px solid black'}}>{item.id}</div>))} */}
 

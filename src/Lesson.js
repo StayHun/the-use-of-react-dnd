@@ -8,29 +8,28 @@ const Types = {
 const cardSource = {
     beginDrag(props) {
         // Return the data describing the dragged item
-        console.log(props);
-        props.first(props.id);
-        const item = { id: props.id };
+        console.log(props); // 该对象里面第二调用的， 然后转向接收器 a2  b2
+        props.first(props.title);
+        const item = { title: props.title };
         return item;
     },
     canDrag(props, monitor) {
-        console.log("canDrag");
-        console.log(props);
-        console.log(monitor);
+        // console.log("canDrag");
+        console.log(props); // 该对象里面最先调用的 a1  b1
+        // console.log(monitor);
         // if(props.id==='Chapter'||props.begin){
         //     return true;
         // }
         return true;
     },
     endDrag(props, monitor, component) {
-        console.log(props);
-        console.log(monitor);
-        console.log(monitor.getItem());
+        console.log(props); // 接收器里面的drop结束后调用 a4
+        // console.log(monitor);
+        // console.log(monitor.getItem());获取beginDrag里面返回的内容
         //   props.move(props.id);
         //props.change();
-        if (props.id === 'Chapter' || props.begin) {
-            console.log("aaa----------------");
-            props.move(props.id);
+        if (props.title === 'Chapter' || props.begin) {
+            props.move(props.title);
         }
         if (!monitor.didDrop()) {
             return;
@@ -49,12 +48,13 @@ function collect(connect, monitor) {
 
 class Lesson extends Component {
     render() {
-        const { id } = this.props;
+        // console.log(this.props); 首次刷新会运行5次
+        const { title } = this.props;
         const { connectDragSource } = this.props;
 
         return connectDragSource(
             <div style={{ width: '200px', margin: '10px', border: '1px solid black' }}>
-                {id}
+                {title}
                 {/* {isDragging && ' (and I am being dragged now)'} */}
             </div>
         );
